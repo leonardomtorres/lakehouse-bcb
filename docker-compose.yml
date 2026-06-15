@@ -1,0 +1,55 @@
+version: "3.9"
+
+services:
+
+  minio:
+    image: minio/minio:RELEASE.2024-01-16T16-07-38Z
+    container_name: lakehouse_minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: lakehouse_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: lakehouse
+      POSTGRES_PASSWORD: lakehouse
+      POSTGRES_DB: lakehouse
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  airflow:
+    image: apache/airflow:2.8.1-python3.11
+    container_name: lakehouse_airflow
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://lakehouse:lakehouse@postgres/lakehouse
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./ingestion:/opt/airflow/ingestion
+      - airflow_logs:/opt/airflow/logs
+    
+    command: >
+      bash -c "airflow db migrate &&
+               airflow users create --username admin --password admin --firstname Leo --lastname Torres --role Admin --email leo3012leo@gmail.com &&
+               airflow webserver & airflow scheduler"
+    
+
+volumes:
+  minio_data:
+  postgres_data:
+  airflow_logs:
