@@ -76,7 +76,7 @@ dashboard/      app Streamlit
 docker-compose.yml
 ```
 
-## TODO / ideias futuras
+## Idéias futuras
 
 - forecast com Prophet pra Selic/IPCA
 - talvez migrar o MinIO pra um bucket S3 real
