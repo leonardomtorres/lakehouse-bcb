@@ -1,0 +1,12 @@
+lakehouse_bcb:
+  outputs:
+    dev:
+      type: postgres
+      host: postgres
+      port: 5432
+      user: lakehouse
+      pass: lakehouse
+      dbname: lakehouse
+      schema: public
+      threads: 4
+  target: dev

@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: public
+    tables:
+      - name: raw_bcb_series
+        description: "Dados brutos das series do BCB, carregados pelo Airflow a partir do Bronze (MinIO)."
+        columns:
+          - name: data
+            description: "Data de referencia do dado."
+          - name: valor
+            description: "Valor numerico da serie nessa data."
+          - name: serie
+            description: "Identificador da serie (ipca_mensal, selic_meta, dolar_ptax)."
+          - name: ingestao_ts
+            description: "Timestamp de quando o registro foi ingerido pelo pipeline."

@@ -38,6 +38,8 @@ services:
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://lakehouse:lakehouse@postgres/lakehouse
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      MINIO_ENDPOINT: "http://minio:9000"
+      POSTGRES_HOST: "postgres"
     volumes:
       - ./dags:/opt/airflow/dags
       - ./ingestion:/opt/airflow/ingestion
@@ -48,6 +50,29 @@ services:
                airflow users create --username admin --password admin --firstname Leo --lastname Torres --role Admin --email leo3012leo@gmail.com &&
                airflow webserver & airflow scheduler"
     
+
+  dbt:
+    image: ghcr.io/dbt-labs/dbt-postgres:1.8.latest
+    container_name: lakehouse_dbt
+    depends_on:
+      - postgres
+    volumes:
+      - ./dbt/lakehouse_bcb:/usr/app
+      - ./dbt/profiles.yml:/root/.dbt/profiles.yml
+    entrypoint: ["sleep", "infinity"]
+
+  dashboard:
+    build: ./dashboard
+    container_name: lakehouse_dashboard
+    depends_on:
+      - postgres
+    ports:
+      - "8501:8501"
+    environment:
+      POSTGRES_HOST: "postgres"
+      STREAMLIT_SERVER_FILE_WATCHER_TYPE: "poll"
+    volumes:
+      - ./dashboard/app.py:/app/app.py
 
 volumes:
   minio_data:

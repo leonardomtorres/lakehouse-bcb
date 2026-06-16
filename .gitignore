@@ -6,3 +6,7 @@ __pycache__/
 .DS_Store
 dbt/target/
 dbt/dbt_packages/
+dbt/lakehouse_bcb/target/
+dbt/lakehouse_bcb/dbt_packages/
+dbt/lakehouse_bcb/logs/
+logs/

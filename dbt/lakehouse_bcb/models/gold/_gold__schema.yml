@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: gold_indicadores_mensais
+    description: "Indicadores macroeconomicos do BCB agregados por mes, uma coluna por serie."
+    columns:
+      - name: mes_referencia
+        description: "Primeiro dia do mes de referencia."
+      - name: ipca_mensal
+        description: "Valor do IPCA mensal no mes."
+      - name: selic_meta
+        description: "Media da meta Selic no mes."
+      - name: dolar_ptax
+        description: "Media do dolar PTAX no mes."

@@ -1,9 +1,10 @@
 import io
+import os
 import boto3
 import pandas as pd
 from datetime import date
 
-MINIO_ENDPOINT = "http://localhost:9000"
+MINIO_ENDPOINT = os.environ.get("MINIO_ENDPOINT", "http://localhost:9000")
 MINIO_ACCESS_KEY = "minioadmin"
 MINIO_SECRET_KEY = "minioadmin"
 BRONZE_BUCKET = "bronze"
